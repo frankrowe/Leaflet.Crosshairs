@@ -10,10 +10,6 @@
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <script src="L.Crosshairs.js"></script>
     <script>
-      var map = L.map('map').setView([38, -80], 5);
-      var simple = L.tileLayer('http://{s}.tiles.mapbox.com/v3/fsrw.j1f1fdcb/{z}/{x}/{y}.png');
-      simple.addTo(map);
-
       var crosshairOptions = {
         style: {
           opacity: 0.3,
@@ -24,18 +20,26 @@
         }
       };
 
-      var crosshair = L.crosshairs(crosshairOptions);
+      var crosshair = L.crosshairs(crosshairOptions),
+          main = L.tileLayer('http://{s}.tiles.mapbox.com/v3/fsrw.j1f1fdcb/{z}/{x}/{y}.png');
+
+      var map = L.map('map',{
+        center: [38, -80],
+        zoom: 5,
+        layers: [main, crosshair]
+      });
 
       var baseLayers = {
-        'main map': simple
+        'Main map': main
       };
 
       var overlayLayers = {
-        'crosshairs': crosshair
+        'Crosshairs': crosshair
       };
 
       var controlLayers = new L.Control.Layers(baseLayers, overlayLayers);
       map.addControl(controlLayers);
+
     </script>
   </body>
 </html>
