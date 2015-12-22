@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <style>
+      #map { height: 480px; width: 720px; margin: 0 auto; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="L.Crosshairs.js"></script>
+    <script>
+      var crosshairOptions = {
+        style: {
+          opacity: 0.3,
+          fillOpacity: 0.1,
+          weight: 1,
+          color: '#B80000',
+          radius: 30
+        }
+      };
+
+      var crosshair = L.crosshairs(crosshairOptions),
+          main = L.tileLayer('http://{s}.tiles.mapbox.com/v3/fsrw.j1f1fdcb/{z}/{x}/{y}.png');
+
+      var map = L.map('map',{
+        center: [38, -80],
+        zoom: 5,
+        layers: [main, crosshair]
+      });
+
+      var baseLayers = {
+        'Main map': main
+      };
+
+      var overlayLayers = {
+        'Crosshairs': crosshair
+      };
+
+      var controlLayers = new L.Control.Layers(baseLayers, overlayLayers);
+      map.addControl(controlLayers);
+
+    </script>
+  </body>
+</html>

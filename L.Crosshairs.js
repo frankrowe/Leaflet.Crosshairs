@@ -16,6 +16,10 @@ L.Crosshairs = L.LayerGroup.extend({
   initialize: function (options) {
     L.LayerGroup.prototype.initialize.call(this);
     L.Util.setOptions(this, options);
+  },
+
+  onAdd: function (map) {
+    this._map = map
 
     this.crosshair = {
       mousecircle: L.circleMarker([0, 0], this.options.style),
@@ -27,10 +31,11 @@ L.Crosshairs = L.LayerGroup.extend({
     for (var layer in this.crosshair) {
       this.addLayer(this.crosshair[layer])
     }
-  },
 
-  onAdd: function (map) {
-    this._map = map
+    this._oldCursor = this._map.getContainer().style.cursor;
+    if (this._oldCursor === undefined) {
+      this._oldCursor = 'default';
+    }
 
     this._map.getContainer().style.cursor = 'none'
 
@@ -41,11 +46,12 @@ L.Crosshairs = L.LayerGroup.extend({
 
     this.eachLayer(map.addLayer, map);
   },
-  
+
   onRemove: function (map) {
     this._map.off('mousemove', this._moveCrosshairs)
     this._map.off('zoomend', this._moveCrosshairs)
     this.eachLayer(this.removeLayer, this);
+    this._map.getContainer().style.cursor = this._oldCursor;
   },
 
   _show: function() {
